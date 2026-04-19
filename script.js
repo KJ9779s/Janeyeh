@@ -14,7 +14,8 @@ const Game = {
         { text: "「這個分數 還是讓芷妤幫你洗吧」", audioId: "audio-result-2" },
         { text: "「好啦 洗半頭也算有洗」", audioId: "audio-result-3" },
         { text: "「愛你但還有點油」", audioId: "audio-result-4" },
-        { text: "「都是藉口罷了」", audioId: "audio-result-5" }
+        { text: "「都是藉口罷了」", audioId: "audio-result-5" },
+        { text: "「來自蔓蔓姐無情的嘲笑」", audioId: "audio-result-6" }
     ],
 
     images: {
@@ -30,7 +31,6 @@ const Game = {
         this.gameBox = document.getElementById('game-box');
         this.hintText = document.getElementById('status-hint');
         this.audioWash = document.getElementById('audio-wash');
-        this.audioTurn = document.getElementById('audio-turn');
         this.scaryVideo = document.getElementById('scary-video');
 
         this.setupEvents();
@@ -40,7 +40,6 @@ const Game = {
     setupEvents() {
         const startHandler = (e) => {
             if (e.target.classList.contains('btn-retry')) return;
-
             if (e.type === 'touchstart') e.preventDefault();
             this.handlePressStart(e.touches ? e.touches[0] : e);
         };
@@ -74,7 +73,7 @@ const Game = {
     },
 
     unlockAudio() {
-        const audios = [this.audioWash, this.audioTurn, this.scaryVideo];
+        const audios = [this.audioWash, this.scaryVideo];
         audios.forEach(a => { if(a) a.play().then(() => a.pause()).catch(() => {}); });
     },
 
@@ -99,7 +98,7 @@ const Game = {
                 this.scoreDisplay.innerText = this.score;
                 this.spawnBubbles();
             }
-        }, 200);
+        }, 100);
     },
 
     stopScoring() {
@@ -111,28 +110,39 @@ const Game = {
         for (let i = 0; i < 3; i++) {
             const b = document.createElement('div');
             b.className = 'bubble';
-            
             const size = Math.random() * 30 + 15; 
             b.style.width = size + 'px';
             b.style.height = size + 'px';
-            
             b.style.left = (Math.random() * 70 + 15) + '%';
             b.style.top = (Math.random() * 40 + 20) + '%';
-            
             this.gameBox.appendChild(b);
-            
             setTimeout(() => b.remove(), 800);
         }
     },
 
     startLogic() {
         if (this.isGameOver || !this.isStarted) return;
-        const nextTurn = Math.random() * 2500 + 1500;
+
+        let nextTurn;
+        if (this.score < 300) {
+            nextTurn = Math.random() * 2500 + 1500; 
+        } else {
+            const maxWait = Math.max(1000, 2500 - ((this.score - 300) * 10));
+            nextTurn = Math.random() * (maxWait - 700) + 700;
+        }
+
         this.timer = setTimeout(() => {
             if (this.isGameOver) return;
             this.state = 'TURN';
-            if (this.audioTurn) this.audioTurn.play().catch(() => {});
             this.updateView();
+
+            let reactionTime;
+            if (this.score < 300) {
+                reactionTime = 350; 
+            } else {
+                reactionTime = Math.max(200, 350 - ((this.score - 300) * 1));
+            }
+
             setTimeout(() => {
                 if (this.isGameOver) return;
                 if (this.isPressing) {
@@ -142,7 +152,7 @@ const Game = {
                     this.updateView();
                     this.startLogic(); 
                 }
-            }, 350);
+            }, reactionTime);
         }, nextTurn);
     },
 
@@ -191,18 +201,17 @@ const Game = {
         this.state = 'BACK';
         this.scoreDisplay.innerText = '0';
         this.overlay.style.display = 'none';
-        
-        const audios = ['audio-result-1', 'audio-result-2', 'audio-result-3', 'audio-result-4', 'audio-result-5'];
+        const audios = ['audio-result-1', 'audio-result-2', 'audio-result-3', 'audio-result-4', 'audio-result-5','audio-result-6'];
         audios.forEach(id => {
             const a = document.getElementById(id);
             if (a) { a.pause(); a.currentTime = 0; }
         });
-        
         this.scaryVideo.classList.remove('video-zoom-in');
         this.scaryVideo.style.display = 'none';
         this.scaryVideo.pause();
         if (this.hintText) this.hintText.style.display = 'block';
         this.updateView();
+        this.unlockAudio();
     }
 };
 
