@@ -1,0 +1,178 @@
+:root {
+    --bg-gradient: linear-gradient(180deg, #fdfbfb 0%, #ebedee 100%);
+    --accent-color: #333;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: var(--bg-gradient);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+    user-select: none;
+}
+
+#game-box {
+    position: relative;
+    width: 380px;
+    height: 600px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#ui-header {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+}
+
+.score-display {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--accent-color);
+}
+
+#shower-head {
+    position: absolute;
+    top: 10%;
+    left: 85%; 
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+    background-image: url('frame/shower.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 5;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+#idol-img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    animation: breathing 4s ease-in-out infinite;
+}
+
+@keyframes breathing {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+#scary-video {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 50;
+    transform-origin: center center;
+}
+
+.video-zoom-in {
+    display: block !important;
+    animation: impactZoom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes impactZoom {
+    0% { transform: scale(0.1); opacity: 1; }
+    100% { transform: scale(1.1); opacity: 1; }
+}
+
+#status-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 32px;
+    font-weight: 600;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+    z-index: 20;
+}
+
+#overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.96);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding-bottom: 60px;
+}
+
+#end-msg { 
+    color: #333; 
+    font-size: 24px; 
+    font-weight: 500; 
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* 1. 本次得分：較大且清晰 */
+.final-score { 
+    font-size: 28px; 
+    font-weight: bold;
+    color: #000; 
+    margin-bottom: 5px;
+}
+
+/* 2. 最高紀錄：較小且透明度低 */
+.high-score-wrap {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 15px;
+}
+
+#high-score-num {
+    font-weight: bold;
+}
+
+.screenshot-tip {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.btn-retry {
+    padding: 12px 50px;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+.bubble {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: bubbleAnim 0.8s ease-out forwards;
+}
+
+@keyframes bubbleAnim {
+    0% { transform: translateY(0) scale(0.5); opacity: 0.6; }
+    100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+}

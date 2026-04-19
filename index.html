@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>葉芷妤今天洗頭了沒?</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+
+		<div id="game-box">
+			<div id="ui-header">
+				<div class="score-display">
+					Score: <span id="score-num">0</span>
+				</div>
+			</div>
+
+			<div id="shower-head"></div>
+			<div id="idol-img"></div>
+			<div id="status-hint">長按幫偶像洗頭</div>
+
+			<video id="scary-video" preload="auto" playsinline="">
+				<source src="frame/scary_video.mp4" type="video/mp4" />
+			</video>
+
+			<div id="overlay">
+				<h2 id="end-msg">載入中...</h2>
+
+				<div class="final-score">
+					本次得分: <span id="last-score">0</span>
+				</div>
+
+				<div class="high-score-wrap">
+					最高紀錄: <span id="high-score-num">0</span>
+				</div>
+
+				<div class="screenshot-tip">
+					提醒：退出或刷新網頁紀錄將會重置<br />
+					建議截圖保存你的最高紀錄！
+				</div>
+
+				<button class="btn-retry" onclick="Game.reset()">再試一次</button>
+			</div>
+
+			<audio id="audio-wash" src="frame/wash_sound.mp3" loop=""></audio>
+			<audio id="audio-turn" src="frame/turn_sound.mp3"></audio>
+			<audio id="audio-result-1" src="frame/result_1.mp3"></audio>
+			<audio id="audio-result-2" src="frame/result_2.mp3"></audio>
+			<audio id="audio-result-3" src="frame/result_3.mp3"></audio>
+			<audio id="audio-result-4" src="frame/result_4.mp3"></audio>
+			<audio id="audio-result-5" src="frame/result_5.mp3"></audio>
+		</div>
+
+		<script src="script.js"></script>
+	</body>
+</html>
