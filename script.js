@@ -39,10 +39,15 @@ const Game = {
 
     setupEvents() {
         const startHandler = (e) => {
-            e.preventDefault();
+            if (e.target.classList.contains('btn-retry')) return;
+
+            if (e.type === 'touchstart') e.preventDefault();
             this.handlePressStart(e.touches ? e.touches[0] : e);
         };
-        const endHandler = () => this.handlePressEnd();
+        const endHandler = (e) => {
+            if (e.target.classList.contains('btn-retry')) return;
+            this.handlePressEnd();
+        };
 
         this.gameBox.addEventListener('touchstart', startHandler, { passive: false });
         this.gameBox.addEventListener('mousedown', startHandler);
@@ -52,7 +57,6 @@ const Game = {
 
     handlePressStart(e) {
         if (this.isGameOver) return;
-        
         if (!this.isStarted) {
             this.unlockAudio();
             this.isStarted = true;
@@ -65,19 +69,21 @@ const Game = {
             this.triggerGameOver();
             return;
         }
-        this.audioWash.play().catch(() => {});
+        if (this.audioWash) this.audioWash.play().catch(() => {});
         this.startScoring();
     },
 
     unlockAudio() {
-        const allAudios = [this.audioWash, this.audioTurn, this.scaryVideo];
-        allAudios.forEach(a => { a.play().then(() => a.pause()).catch(() => {}); });
+        const audios = [this.audioWash, this.audioTurn, this.scaryVideo];
+        audios.forEach(a => { if(a) a.play().then(() => a.pause()).catch(() => {}); });
     },
 
     handlePressEnd() {
         this.isPressing = false;
-        this.audioWash.pause();
-        this.audioWash.currentTime = 0;
+        if (this.audioWash) {
+            this.audioWash.pause();
+            this.audioWash.currentTime = 0;
+        }
         this.stopScoring();
     },
 
@@ -102,15 +108,21 @@ const Game = {
     },
 
     spawnBubbles() {
-        const b = document.createElement('div');
-        b.className = 'bubble';
-        const size = Math.random() * 20 + 10;
-        b.style.width = size + 'px';
-        b.style.height = size + 'px';
-        b.style.left = (Math.random() * 70 + 15) + '%';
-        b.style.top = (Math.random() * 40 + 20) + '%';
-        this.gameBox.appendChild(b);
-        setTimeout(() => b.remove(), 700);
+        for (let i = 0; i < 3; i++) {
+            const b = document.createElement('div');
+            b.className = 'bubble';
+            
+            const size = Math.random() * 30 + 15; 
+            b.style.width = size + 'px';
+            b.style.height = size + 'px';
+            
+            b.style.left = (Math.random() * 70 + 15) + '%';
+            b.style.top = (Math.random() * 40 + 20) + '%';
+            
+            this.gameBox.appendChild(b);
+            
+            setTimeout(() => b.remove(), 800);
+        }
     },
 
     startLogic() {
@@ -119,7 +131,7 @@ const Game = {
         this.timer = setTimeout(() => {
             if (this.isGameOver) return;
             this.state = 'TURN';
-            this.audioTurn.play().catch(() => {});
+            if (this.audioTurn) this.audioTurn.play().catch(() => {});
             this.updateView();
             setTimeout(() => {
                 if (this.isGameOver) return;
@@ -138,14 +150,13 @@ const Game = {
         this.isGameOver = true;
         this.isPressing = false;
         this.stopScoring();
-        this.audioWash.pause();
+        if (this.audioWash) this.audioWash.pause();
         clearTimeout(this.timer);
 
         this.scaryVideo.classList.add('video-zoom-in');
         this.scaryVideo.currentTime = 0;
         this.scaryVideo.muted = false; 
         this.scaryVideo.play().catch(() => { this.showSettlement(); });
-
         this.scaryVideo.onended = () => {
             this.scaryVideo.classList.remove('video-zoom-in');
             this.scaryVideo.style.display = 'none';
@@ -154,7 +165,7 @@ const Game = {
     },
 
     showSettlement() {
-        if (this.score > this.highScore) { this.highScore = this.score; }
+        if (this.score > this.highScore) this.highScore = this.score;
         document.getElementById('high-score-num').innerText = this.highScore;
         
         let newIndex;
@@ -169,7 +180,7 @@ const Game = {
         this.overlay.style.display = 'flex';
         
         const resultAudio = document.getElementById(chosen.audioId);
-        if (resultAudio) { resultAudio.play().catch(() => {}); }
+        if (resultAudio) resultAudio.play().catch(() => {});
     },
 
     reset() {

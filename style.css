@@ -24,8 +24,21 @@ body {
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.05);
     overflow: hidden;
-    /* 增加硬體加速 */
     transform: translateZ(0);
+}
+
+#ui-header {
+    position: absolute !important;
+    top: 15px !important;
+    left: 20px !important; 
+    z-index: 10 !important;
+    pointer-events: none !important;
+}
+
+.score-display {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--accent-color);
 }
 
 #shower-head {
@@ -35,15 +48,13 @@ body {
     transform: translateX(-50%);
     width: 80px;
     height: 80px;
-
-    background-image: url('./frame/shower.png'); 
+    background-image: url('frame/shower.PNG'); 
     background-size: contain;
     background-repeat: no-repeat;
     z-index: 5;
     opacity: 0.8;
     pointer-events: none;
 }
-
 
 #idol-img {
     width: 100%;
@@ -68,7 +79,6 @@ body {
     height: 100%;
     object-fit: cover;
     z-index: 50;
-    will-change: transform;
 }
 
 .video-zoom-in {
@@ -87,12 +97,17 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
+    width: 85%;
     text-align: center;
-    color: rgba(0, 0, 0, 0.5);
+    color: #1a1a1a !important; 
     font-size: 32px;
-    font-weight: 600;
+    font-weight: 800;
     z-index: 20;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 15px 10px;
+    border-radius: 15px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1); 
+    pointer-events: none;
 }
 
 #overlay {
@@ -106,23 +121,44 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 100;
-    padding-bottom: 60px;
 }
 
-.final-score { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
+.final-score { font-size: 28px; font-weight: bold; margin-bottom: 5px; color: #000; }
 .high-score-wrap { font-size: 14px; color: rgba(0,0,0,0.4); margin-bottom: 15px; }
-.screenshot-tip { font-size: 12px; color: #aaa; text-align: center; margin-bottom: 25px; }
-.btn-retry { padding: 12px 50px; background: #000; color: #fff; border: none; cursor: pointer; }
+.screenshot-tip { font-size: 12px; color: #aaa; text-align: center; margin-bottom: 25px; padding: 0 20px; }
+
+.btn-retry { 
+    position: relative;
+    z-index: 110; 
+    padding: 12px 50px; 
+    background: #000; 
+    color: #fff;
+    border: none; 
+    cursor: pointer;
+    touch-action: auto !important; 
+}
 
 .bubble {
     position: absolute;
-    background: rgba(255, 255, 255, 0.4);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(200, 230, 255, 0.6));
+    border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 50%;
     pointer-events: none;
+    will-change: transform, opacity;
     animation: bubbleAnim 0.8s ease-out forwards;
+    z-index: 15;
 }
 
 @keyframes bubbleAnim {
-    0% { transform: translateY(0) scale(0.5); opacity: 0.6; }
-    100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+   0% { 
+        transform: translateY(0) scale(0.5); 
+        opacity: 0; 
+    }
+    20% {
+        opacity: 0.9;
+    }
+    100% { 
+        transform: translateY(-120px) scale(1.5); 
+        opacity: 0; 
+    }
 }
